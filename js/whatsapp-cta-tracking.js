@@ -3,24 +3,30 @@
  * ----------------------------------------------------------------------
  * 1. Lê o click ID da URL (?tblci= / ?clickid= / ?cid=).
  * 2. Monta o link do WhatsApp com texto pré-preenchido + [ref:CLICKID].
- * 3. NOVO: registra o clique no botão (para medir o vazamento
+ * 3. Registra o clique no botão (para medir o vazamento
  *    clique-no-botão -> mensagem enviada). Envia para:
  *    a) o sensor da MGID/Taboola (evento customizado), se presente;
  *    b) o porteiro, via GET /clique?ref=CLICKID (se PORTEIRO_URL definido).
+ * 4. Se o número oficial ainda não foi configurado, mostra um aviso
+ *    em vez de abrir o WhatsApp (modo prévia).
  */
 
 (function () {
   'use strict';
 
-  // Número de destino (somente dígitos, com código do país) — TROCAR pelo da Bio Saúde
-  var WHATSAPP_PHONE = '5500000000000';
+  // Número oficial da Bio Saúde (somente dígitos, com 55 + DDD) — PENDENTE
+  var WHATSAPP_PHONE = '';
 
   // Texto pré-preenchido (o [ref:...] é adicionado ao final)
-  var BASE_TEXT = 'Olá! Vi o anúncio do Alpha 69 e quero saber mais. Pode me ajudar?';
+  var BASE_TEXT = 'Olá! Vim do artigo sobre o Alpha69 e gostaria de conhecer a composição, o preço e as condições de compra.';
 
   // URL base do porteiro (para registrar cliques no botão). Ex: 'https://porteiro.seudominio.com'
   // Deixe '' para desativar.
   var PORTEIRO_URL = '';
+
+  function phoneOk() {
+    return /^55\d{10,11}$/.test(WHATSAPP_PHONE);
+  }
 
   function getClickId() {
     var params = new URLSearchParams(window.location.search);
@@ -33,6 +39,7 @@
   }
 
   function buildWaUrl() {
+    if (!phoneOk()) return '#';
     var clickId = getClickId();
     var text = BASE_TEXT + ' [ref:' + clickId + ']';
     return (
@@ -64,7 +71,13 @@
       a.setAttribute('href', url);
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener');
-      a.addEventListener('click', function () { trackButtonClick(clickId); });
+      a.addEventListener('click', function (e) {
+        trackButtonClick(clickId);
+        if (!phoneOk()) {
+          e.preventDefault();
+          alert('O número oficial do WhatsApp da Bio Saúde ainda não foi configurado nesta prévia.');
+        }
+      });
     });
   }
 

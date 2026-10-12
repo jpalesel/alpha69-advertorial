@@ -11,9 +11,9 @@ Página ao vivo verificada hoje: https://alpha69.tecnologiaagora.com (HTTP 200, 
   + `[ref:CLICKID]` (atribuição do lead ao clique MGID) — pronto.
 - Hook do sensor MGID já no código (`window._mgq` → evento `wa_cta_click`), **sensor em si pendente da Lavínia**.
 - `PORTEIRO_URL` vazio (correto por enquanto — API oficial x app ainda não confirmado pelo Wesley).
-- **Divergência de versão:** o ar está com CTAs suavizados ("CONHECER O ALPHA69 NO WHATSAPP",
-  "TIRAR DÚVIDAS COM UM CONSULTOR", "FALAR COM A BIO SAÚDE AGORA"); o `copy-final.md` v1.0 (09/10)
-  tem CTAs mais agressivos ("QUERO MEU DESCONTO DE 60%"). A versão do ar é a mais segura para moderação.
+- **CTAs (resolvido 12/10):** página e `copy-final.md` v1.1 usam só CTAs suavizados ("QUERO CONHECER O ALPHA69",
+  "TIRAR MINHAS DÚVIDAS NO WHATSAPP", "CONSULTAR A CONDIÇÃO ESPECIAL", "FALAR COM UM CONSULTOR AGORA",
+  rodapé fixo "CONHECER O ALPHA69"). Nenhum botão promete "60% de desconto".
 
 ## Inventário de claims (para a Lavínia aprovar/recusar)
 

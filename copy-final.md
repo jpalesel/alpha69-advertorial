@@ -1,5 +1,5 @@
 # COPY FINAL — Advertorial Alpha 69 (Bio Saúde)
-*Versão 1.0 — 09/10/2026. Aguardando: composição validada (Wesley), avaliações reais autorizadas, confirmação da oferta.*
+*Versão 1.1 — 12/10/2026 (CTAs suavizados para moderação). Aguardando: composição validada (Wesley), avaliações reais autorizadas, confirmação da oferta.*
 
 *PUBLICIDADE | CONTEÚDO INFORMATIVO BIO SAÚDE*
 
@@ -60,7 +60,7 @@ Um produto alimentar não substitui o acompanhamento de saúde nem deve ser ente
 **Quer conhecer a fórmula do Alpha 69 e entender melhor as informações do produto?**
 
 [CTA 1]
-**QUERO MEU DESCONTO DE 60%**
+**QUERO CONHECER O ALPHA69**
 *Conversa privada no WhatsApp com um consultor Bio Saúde. Sem compromisso de compra.*
 [/CTA 1]
 
@@ -150,7 +150,7 @@ Informação, hábitos saudáveis e acompanhamento adequado são fundamentais.
 [FOTO 6: img/foto-6-confianca.jpg]
 
 [CTA 3]
-**QUERO MEU DESCONTO DE 60%**
+**FALAR COM UM CONSULTOR AGORA**
 *Atendimento privado. Conheça a composição, esclareça dúvidas e consulte as condições comerciais.*
 [/CTA 3]
 

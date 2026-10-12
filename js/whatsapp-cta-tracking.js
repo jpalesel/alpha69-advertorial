@@ -1,8 +1,8 @@
 /**
  * WhatsApp CTA com rastreamento de Click ID + clique no botão (Alpha 69)
  * ----------------------------------------------------------------------
- * 1. Lê o click ID da URL (?tblci= / ?clickid= / ?cid=).
- * 2. Monta o link do WhatsApp com texto pré-preenchido + [ref:CLICKID].
+ * 1. Lê o click ID da URL (?clickid= / ?tblci= / ?cid=) e a origem MGID (?w= widget, ?t= teaser).
+ * 2. Monta o link do WhatsApp com texto pré-preenchido + [ref:CLICKID|wWIDGET|tTEASER].
  * 3. Registra o clique no botão (para medir o vazamento
  *    clique-no-botão -> mensagem enviada). Envia para:
  *    a) o sensor da MGID/Taboola (evento customizado), se presente;
@@ -28,20 +28,40 @@
     return /^55\d{10,11}$/.test(WHATSAPP_PHONE);
   }
 
+  function getParams() {
+    return new URLSearchParams(window.location.search);
+  }
+
   function getClickId() {
-    var params = new URLSearchParams(window.location.search);
+    var params = getParams();
     return (
-      params.get('tblci') ||
       params.get('clickid') ||
+      params.get('tblci') ||
       params.get('cid') ||
       'direto'
     );
   }
 
+  // Origem MGID: widget (site) e teaser (anúncio). URL do anúncio na MGID:
+  //   https://alpha69.tecnologiaagora.com/?clickid={click_id}&w={widget_id}&t={teaser_id}
+  function clean(v) {
+    return (v || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 40);
+  }
+
+  // Ref que vai no texto do WhatsApp: CLICKID|wWIDGET|tTEASER
+  function getRef() {
+    var params = getParams();
+    var ref = clean(getClickId()) || 'direto';
+    var w = clean(params.get('w') || params.get('widget_id'));
+    var t = clean(params.get('t') || params.get('teaser_id'));
+    if (w) ref += '|w' + w;
+    if (t) ref += '|t' + t;
+    return ref;
+  }
+
   function buildWaUrl() {
     if (!phoneOk()) return '#';
-    var clickId = getClickId();
-    var text = BASE_TEXT + ' [ref:' + clickId + ']';
+    var text = BASE_TEXT + ' [ref:' + getRef() + ']';
     return (
       'https://api.whatsapp.com/send/?phone=' +
       WHATSAPP_PHONE +
@@ -53,8 +73,12 @@
   // Registra o clique no botão (não-bloqueante)
   function trackButtonClick(clickId) {
     try {
-      // a) Sensor MGID/Taboola, se existir
-      if (window._mgq) window._mgq.push(['track', 'wa_cta_click', { ref: clickId }]);
+      // a) Sensor MGID, se instalado no <head>.
+      //    Formato de evento do sensor MGID: ["MgSensorInvoke", "<nome_do_evento>"].
+      //    Conferir com o código que a MGID/Lavínia enviar e cadastrar
+      //    o evento "wa_cta_click" como conversão no painel da MGID.
+      window._mgq = window._mgq || [];
+      window._mgq.push(['MgSensorInvoke', 'wa_cta_click']);
       // b) Porteiro
       if (PORTEIRO_URL) {
         var url = PORTEIRO_URL.replace(/\/$/, '') + '/clique?ref=' + encodeURIComponent(clickId);
@@ -66,7 +90,7 @@
 
   function applyToButtons() {
     var url = buildWaUrl();
-    var clickId = getClickId();
+    var clickId = getRef();
     document.querySelectorAll('a[data-wa-cta]').forEach(function (a) {
       a.setAttribute('href', url);
       a.setAttribute('target', '_blank');

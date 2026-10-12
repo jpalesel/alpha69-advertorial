@@ -18,7 +18,7 @@
   var WHATSAPP_PHONE = '5511947053538'; // +55 11 94705-3538 — recebido de Wesley em 12/10/2026
 
   // Texto pré-preenchido (o [ref:...] é adicionado ao final)
-  var BASE_TEXT = 'Olá! Li o artigo sobre o Alpha69 e quero saber mais: qual a composição, o preço e como aproveito a oferta?';
+  var BASE_TEXT = 'Olá! Li o artigo sobre o Alpha69 e quero conhecer melhor o produto. Pode me passar mais informações?';
 
   // URL base do porteiro (para registrar cliques no botão). Ex: 'https://porteiro.seudominio.com'
   // Deixe '' para desativar.

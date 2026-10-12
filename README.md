@@ -25,3 +25,12 @@ Placeholders marcados com [MAIÚSCULAS] — preencher com:
 1. Clique no anúncio → MGID/Taboola (clickid/tblci na URL)
 2. Clique no botão WhatsApp → `trackButtonClick` (sensor + porteiro `/clique`)
 3. Mensagem enviada → porteiro via webhook (`[ref:CLICKID]` no texto)
+
+## URL do anúncio na MGID
+
+```
+https://alpha69.tecnologiaagora.com/?clickid={click_id}&w={widget_id}&t={teaser_id}
+```
+
+O texto do WhatsApp sai com `[ref:CLICKID|wWIDGET|tTEASER]` — o call center/porteiro usa isso para atribuir a mensagem (2º degrau) ao clique e ao site de origem.
+Evento do 1º degrau no sensor MGID: `wa_cta_click` (via `MgSensorInvoke`) — cadastrar como conversão no painel.

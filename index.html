@@ -75,7 +75,7 @@ document.querySelectorAll('a[data-cta]').forEach(el=>{
     const id = params.get('clickid') || '';
     const url = 'https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(msg+(id?' [ref:'+id+']':''));
     if(typeof gtag==='function') gtag('event','clique_whatsapp',{cta_position:this.dataset.cta});
-    window.location.href=url;
+    setTimeout(function(){ window.location.href=url; }, 400); // aguarda 0,4s para o pixel MGID/GA4 terminar de enviar
   });
 });
 </script></body></html>

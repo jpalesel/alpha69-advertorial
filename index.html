@@ -75,7 +75,15 @@ document.querySelectorAll('a[data-cta]').forEach(el=>{
     const id = params.get('clickid') || '';
     const url = 'https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(msg+(id?' [ref:'+id+']':''));
     if(typeof gtag==='function') gtag('event','clique_whatsapp',{cta_position:this.dataset.cta});
-    setTimeout(function(){ window.location.href=url; }, 400); // aguarda 0,4s para o pixel MGID/GA4 terminar de enviar
+    // Aguarda o pixel de conversão da MGID terminar de enviar antes de ir ao WhatsApp (máx. 1,5s)
+    let done=false; const go=function(){ if(done) return; done=true; window.location.href=url; };
+    try{
+      const po=new PerformanceObserver(function(list){
+        list.getEntries().forEach(function(en){ if(/mgid\.com\/1x1/.test(en.name) && en.name.indexOf('gtms=buy')>-1){ po.disconnect(); go(); } });
+      });
+      po.observe({type:'resource', buffered:false});
+    }catch(err){}
+    setTimeout(go,1500);
   });
 });
 </script></body></html>
